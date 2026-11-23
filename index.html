@@ -55,7 +55,7 @@
       flex-shrink: 0;
     }
 
-    /* Fullscreen fallback mode when native Fullscreen API is restricted inside iframes */
+    
     body.pseudo-fullscreen {
       background: #000000;
     }
@@ -637,7 +637,7 @@
       margin-top: 10px;
     }
 
-    /* Apple Park Photo Carousel (Slide 4) */
+    
     .park-carousel {
       flex: 1;
       display: flex;
@@ -1648,7 +1648,7 @@
   const fsBtn = document.getElementById('fsBtn');
   let current = 0;
 
-  /* Responsive stage scaling so the 1280x720 deck fits any screen or preview window */
+  
   function fitStage() {
     const isPseudo = document.body.classList.contains('pseudo-fullscreen');
     const padX = isPseudo ? 0 : 24;
@@ -1663,7 +1663,7 @@
   window.addEventListener('load', fitStage);
   fitStage();
 
-  /* Animate KPI numbers when entering a slide */
+  
   function animateCounters(slideEl) {
     slideEl.querySelectorAll('.count-up').forEach(el => {
       const target = parseFloat(el.dataset.target);
@@ -1684,7 +1684,7 @@
     });
   }
 
-  /* Navigate between slides */
+  
   function showSlide(index) {
     if (index < 0 || index >= slides.length) return;
     const goingForward = index >= current;
@@ -1708,7 +1708,7 @@
     progressFill.style.width = `${((current + 1) / slides.length) * 100}%`;
   }
 
-  /* Subtle Apple-style cursor spotlight on cards */
+  
   document.querySelectorAll('.card, .glass-card').forEach(card => {
     card.addEventListener('mousemove', e => {
       const rect = card.getBoundingClientRect();
@@ -1717,7 +1717,7 @@
     });
   });
 
-  /* Slide 2 History & Scandals tab switcher */
+  
   let activeHistoryTab = 'milestones';
 
   function switchHistoryTab(tab) {
@@ -1742,7 +1742,7 @@
     switchHistoryTab(activeHistoryTab === 'milestones' ? 'scandals' : 'milestones');
   }
 
-  /* Slide 5 iPhone Eras Interactive Modal */
+  
   const iphoneModels = [
     {
       era: "2007 Milestone",
@@ -1867,7 +1867,7 @@
     renderIphoneModal(next);
   }
 
-  /* Slide 6 Interactive Bar & Donut Charts */
+  
   const chartDatasets = {
     units: {
       title: "Yearly iPhone Sales (Millions of Units)",
@@ -1941,7 +1941,7 @@
     }
   }
 
-  /* Slide 7 Interactive Ecosystem Lock-In Calculator */
+  
   function toggleEco(chipEl) {
     chipEl.classList.toggle('selected');
     const count = document.querySelectorAll('.eco-chip.selected').length;
@@ -1958,7 +1958,7 @@
     document.getElementById('eco-bar').style.width = `${state.pct}%`;
   }
 
-  /* Apple Park HQ Photo Carousel Controller */
+  
   const parkPhotos = [
     {
       tag: "Cupertino, California • Aerial Panorama",
@@ -2028,7 +2028,7 @@
     setParkSlide(next);
   }
 
-  /* Reliable Fullscreen Toggle (Native Fullscreen + Iframe Fallback) */
+  
   function syncFullscreenButton() {
     const isNativeFs = Boolean(document.fullscreenElement || document.webkitFullscreenElement);
     const isPseudoFs = document.body.classList.contains('pseudo-fullscreen');
@@ -2070,7 +2070,7 @@
         document.body.classList.add('pseudo-fullscreen');
       }
     } catch (err) {
-      /* Fallback to full-viewport mode if iframe blocks native fullscreen */
+      
       document.body.classList.add('pseudo-fullscreen');
     }
     syncFullscreenButton();
@@ -2079,12 +2079,12 @@
   document.addEventListener('fullscreenchange', syncFullscreenButton);
   document.addEventListener('webkitfullscreenchange', syncFullscreenButton);
 
-  /* Navigation Button Listeners */
+  
   document.getElementById('prevBtn').addEventListener('click', () => showSlide(current - 1));
   document.getElementById('nextBtn').addEventListener('click', () => showSlide(current + 1));
   fsBtn.addEventListener('click', toggleFullscreen);
 
-  /* Keyboard Shortcuts */
+  
   document.addEventListener('keydown', e => {
     const modalOpen = document.getElementById('iphone-modal').classList.contains('open');
 
