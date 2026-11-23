@@ -1,0 +1,2143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apple &amp; The iPhone Revolution — Interactive Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-light: #f5f5f7;
+      --bg-dark: #000000;
+      --card-white: #ffffff;
+      --text-primary: #1d1d1f;
+      --text-secondary: #6e6e73;
+      --apple-blue: #0071e3;
+      --apple-blue-soft: rgba(0, 113, 227, 0.11);
+      --apple-green: #34c759;
+      --apple-green-soft: rgba(52, 199, 89, 0.12);
+      --apple-indigo: #5856d6;
+      --apple-indigo-soft: rgba(88, 86, 214, 0.12);
+      --apple-orange: #ff9500;
+      --apple-orange-soft: rgba(255, 149, 0, 0.12);
+      --radius-xl: 26px;
+      --radius-lg: 20px;
+      --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.045), 0 1px 3px rgba(0, 0, 0, 0.03);
+      --shadow-hover: 0 24px 48px rgba(0, 113, 227, 0.15), 0 6px 16px rgba(0, 0, 0, 0.07);
+      --ease-apple: cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --font-apple: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #09090b;
+      font-family: var(--font-apple);
+      color: var(--text-primary);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
+    }
+
+    #stage {
+      width: 1280px;
+      height: 720px;
+      position: relative;
+      transform-origin: center center;
+      flex-shrink: 0;
+    }
+
+    /* Fullscreen fallback mode when native Fullscreen API is restricted inside iframes */
+    body.pseudo-fullscreen {
+      background: #000000;
+    }
+
+    body.pseudo-fullscreen .slide {
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    #progress-track {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 3px;
+      background: rgba(255, 255, 255, 0.08);
+      z-index: 200;
+    }
+
+    #progress-fill {
+      height: 100%; width: 10%;
+      background: linear-gradient(90deg, #0071e3, #5ac8fa, #34c759);
+      transition: width 0.55s var(--ease-apple);
+    }
+
+    .slide {
+      width: 1280px;
+      height: 720px;
+      position: absolute;
+      inset: 0;
+      padding: 44px 56px 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: var(--bg-light);
+      border-radius: 20px;
+      overflow: hidden;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: scale(0.95) translateX(48px);
+      transition:
+        opacity 0.55s var(--ease-apple),
+        transform 0.65s var(--ease-apple),
+        visibility 0.55s;
+      box-shadow: 0 32px 90px rgba(0, 0, 0, 0.65);
+    }
+
+    .slide.prev-exit { transform: scale(0.95) translateX(-48px); }
+    .slide.next-exit { transform: scale(0.95) translateX(48px); }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: scale(1) translateX(0);
+      z-index: 5;
+    }
+
+    .slide.dark { background: var(--bg-dark); color: #f5f5f7; }
+    .slide.charcoal { background: #121215; color: #f5f5f7; }
+
+    @keyframes appleFadeUp {
+      0% { opacity: 0; transform: translateY(24px) scale(0.98); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .slide.active .anim-item { animation: appleFadeUp 0.65s var(--ease-apple) backwards; }
+    .slide.active .d-1 { animation-delay: 0.05s; }
+    .slide.active .d-2 { animation-delay: 0.13s; }
+    .slide.active .d-3 { animation-delay: 0.21s; }
+    .slide.active .d-4 { animation-delay: 0.29s; }
+    .slide.active .d-5 { animation-delay: 0.37s; }
+    .slide.active .d-6 { animation-delay: 0.45s; }
+
+    .slide-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--apple-blue);
+      margin-bottom: 5px;
+    }
+
+    .dark .eyebrow, .charcoal .eyebrow { color: #2997ff; }
+
+    h1 { font-size: 62px; font-weight: 700; letter-spacing: -0.035em; line-height: 1.06; }
+    h2 { font-size: 37px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.12; }
+    h3 { font-size: 19px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 8px; transition: color 0.25s ease; }
+
+    p, li { font-size: 14.5px; line-height: 1.5; color: var(--text-secondary); font-weight: 400; }
+    .dark p, .charcoal p, .charcoal li { color: #a1a1a6; }
+    strong { color: var(--text-primary); font-weight: 600; }
+    .dark strong, .charcoal strong { color: #ffffff; }
+
+    .card {
+      background: var(--card-white);
+      border-radius: var(--radius-xl);
+      padding: 22px 25px;
+      box-shadow: var(--shadow-card);
+      border: 1px solid rgba(0, 0, 0, 0.045);
+      position: relative;
+      overflow: hidden;
+      transition:
+        transform 0.38s var(--ease-spring),
+        box-shadow 0.38s var(--ease-apple),
+        border-color 0.3s ease;
+    }
+
+    .card::after, .glass-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 50%), rgba(0, 113, 227, 0.08), transparent 65%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .glass-card::after {
+      background: radial-gradient(380px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.14), transparent 65%);
+    }
+
+    .card:hover::after, .glass-card:hover::after { opacity: 1; }
+
+    .card:hover {
+      transform: translateY(-6px) scale(1.022);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(0, 113, 227, 0.28);
+      z-index: 3;
+    }
+
+    .card:hover h3 { color: var(--apple-blue); }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.065);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: var(--radius-xl);
+      padding: 20px 20px;
+      position: relative;
+      overflow: hidden;
+      transition:
+        transform 0.38s var(--ease-spring),
+        background 0.35s ease,
+        border-color 0.35s ease,
+        box-shadow 0.35s ease;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-7px) scale(1.028);
+      background: rgba(255, 255, 255, 0.115);
+      border-color: rgba(41, 151, 255, 0.55);
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5), 0 0 28px rgba(41, 151, 255, 0.2);
+      z-index: 3;
+    }
+
+    .icon-badge {
+      width: 42px; height: 42px; border-radius: 13px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--apple-blue-soft);
+      backdrop-filter: blur(10px);
+      color: var(--apple-blue);
+      margin-bottom: 12px;
+      flex-shrink: 0;
+      transition: transform 0.38s var(--ease-spring);
+    }
+
+    .card:hover .icon-badge, .glass-card:hover .icon-badge { transform: scale(1.14) rotate(-4deg); }
+    .icon-badge.green { background: var(--apple-green-soft); color: var(--apple-green); }
+    .icon-badge.indigo { background: var(--apple-indigo-soft); color: var(--apple-indigo); }
+    .icon-badge.orange { background: var(--apple-orange-soft); color: var(--apple-orange); }
+    .icon-badge.red { background: rgba(255, 59, 48, 0.12); color: #ff3b30; }
+    .icon-badge.glass {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+    }
+
+    .icon-badge svg {
+      width: 21px; height: 21px; stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .bullet-list { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .bullet-list li { padding-left: 16px; position: relative; transition: transform 0.25s ease; }
+    .bullet-list li:hover { transform: translateX(4px); }
+    .bullet-list li::before {
+      content: ""; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--apple-blue); position: absolute; left: 0; top: 8px;
+    }
+
+    .slide-footer {
+      display: flex; justify-content: flex-start; align-items: center;
+      font-size: 12px; color: #86868b; margin-top: 12px;
+    }
+
+    .title-slide-content {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; text-align: center; position: relative; z-index: 2;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { transform: translate(-50%, -55%) scale(1); opacity: 0.85; }
+      50% { transform: translate(-50%, -55%) scale(1.14); opacity: 1; }
+    }
+
+    .ambient-glow {
+      position: absolute; width: 580px; height: 580px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 113, 227, 0.3) 0%, rgba(88, 86, 214, 0.1) 45%, rgba(0, 0, 0, 0) 70%);
+      top: 50%; left: 50%;
+      animation: pulseGlow 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .apple-logo-hero {
+      width: 66px; height: 80px; fill: #ffffff; margin-bottom: 24px;
+      filter: drop-shadow(0 10px 28px rgba(255, 255, 255, 0.22));
+      transition: transform 0.45s var(--ease-spring), filter 0.4s ease;
+      cursor: pointer;
+    }
+
+    .apple-logo-hero:hover {
+      transform: scale(1.14);
+      filter: drop-shadow(0 14px 36px rgba(41, 151, 255, 0.6));
+    }
+
+    .title-subtitle {
+      font-size: 21px; color: #a1a1a6; max-width: 840px;
+      margin: 18px auto 34px; line-height: 1.4; font-weight: 400;
+    }
+
+    .author-pill {
+      display: inline-flex; align-items: center; gap: 14px;
+      padding: 14px 30px; border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(18px);
+      font-size: 16px; color: #f5f5f7;
+      transition: transform 0.35s var(--ease-spring), background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .author-pill:hover {
+      transform: scale(1.06);
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(41, 151, 255, 0.55);
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; flex: 1; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; flex: 1; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; flex: 1; }
+    .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; flex: 1; }
+
+    .year-pill.red { background: rgba(255, 59, 48, 0.12); color: #ff3b30; }
+
+    .history-panel { display: none; flex: 1; }
+    .history-panel.active { display: grid; }
+
+    .history-banner {
+      margin-top: 12px;
+      background: #1d1d1f;
+      color: #f5f5f7;
+      border-radius: 16px;
+      padding: 11px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      cursor: pointer;
+      transition: transform 0.3s var(--ease-spring), box-shadow 0.3s ease;
+    }
+
+    .history-banner:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.18);
+    }
+
+    .history-banner-btn {
+      background: #0071e3;
+      color: #ffffff;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s var(--ease-spring);
+    }
+
+    .history-banner-btn:hover { background: #2997ff; transform: scale(1.04); }
+
+    .kpi-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 16px; }
+
+    .kpi-box {
+      background: var(--card-white); border-radius: var(--radius-lg);
+      padding: 16px 22px; box-shadow: var(--shadow-card);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      transition: transform 0.38s var(--ease-spring), box-shadow 0.38s ease, border-color 0.3s ease;
+    }
+
+    .kpi-box:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(0, 113, 227, 0.25);
+    }
+
+    .kpi-value { font-size: 35px; font-weight: 700; letter-spacing: -0.03em; color: var(--apple-blue); line-height: 1.1; }
+    .kpi-label { font-size: 13px; color: var(--text-secondary); margin-top: 4px; font-weight: 500; }
+
+    .timeline-card { display: flex; flex-direction: column; justify-content: space-between; position: relative; }
+    .year-pill {
+      display: inline-block; padding: 5px 12px; border-radius: 999px;
+      background: var(--apple-blue-soft); color: var(--apple-blue);
+      font-weight: 700; font-size: 12.5px; margin-bottom: 10px; width: fit-content;
+    }
+
+    .iphone-card { cursor: pointer; }
+
+    .real-thumb-box {
+      width: 100%;
+      height: 146px;
+      border-radius: 16px;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin-bottom: 14px;
+      padding: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: inset 0 1px 4px rgba(0,0,0,0.08);
+    }
+
+    .real-thumb-box.dark-bg { background: #000000; }
+
+    .real-thumb-box img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: transform 0.45s var(--ease-spring);
+    }
+
+    .iphone-card:hover .real-thumb-box img { transform: scale(1.1); }
+
+    .inspect-badge {
+      margin-top: 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #2997ff;
+      background: rgba(41, 151, 255, 0.14);
+      padding: 6px 12px;
+      border-radius: 999px;
+      width: fit-content;
+      transition: background 0.25s ease, transform 0.25s var(--ease-spring);
+    }
+
+    .iphone-card:hover .inspect-badge {
+      background: #0071e3;
+      color: #ffffff;
+      transform: scale(1.05);
+    }
+
+    #iphone-modal {
+      position: absolute;
+      inset: 0;
+      background: rgba(8, 8, 10, 0.86);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.4s var(--ease-apple), visibility 0.4s;
+    }
+
+    #iphone-modal.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .modal-sheet {
+      width: 1110px;
+      height: 595px;
+      background: #1c1c1e;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 30px;
+      padding: 32px 38px;
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      gap: 34px;
+      color: #f5f5f7;
+      box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+      transform: scale(0.72) translateY(30px);
+      opacity: 0;
+      transition: transform 0.5s var(--ease-spring), opacity 0.4s var(--ease-apple);
+      position: relative;
+    }
+
+    #iphone-modal.open .modal-sheet {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px; right: 22px;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #fff; font-size: 18px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.25s var(--ease-spring), background 0.2s ease;
+    }
+
+    .modal-close:hover { background: #ff3b30; transform: scale(1.12); }
+
+    .device-showcase {
+      background: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px;
+      transition: background 0.35s ease;
+    }
+
+    .device-showcase.dark-stage { background: #000000; }
+
+    .photo-stage {
+      width: 100%;
+      height: 445px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 16px;
+      margin: auto 0;
+    }
+
+    .photo-stage img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 12px;
+      transition: transform 0.45s var(--ease-spring), opacity 0.3s ease;
+    }
+
+    .photo-stage:hover img { transform: scale(1.06); }
+
+    .spec-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 14px 0;
+    }
+
+    .spec-tile {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 12px 15px;
+    }
+
+    .spec-tile .s-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #86868b; font-weight: 600; }
+    .spec-tile .s-val { font-size: 14.5px; font-weight: 600; color: #ffffff; margin-top: 3px; }
+
+    .segmented-control {
+      display: inline-flex;
+      background: #e5e5ea;
+      padding: 3px;
+      border-radius: 10px;
+      gap: 2px;
+    }
+
+    .segmented-control button {
+      border: none;
+      background: transparent;
+      padding: 5px 11px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #6e6e73;
+      cursor: pointer;
+      transition: all 0.25s var(--ease-apple);
+    }
+
+    .segmented-control button.active {
+      background: #ffffff;
+      color: #1d1d1f;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+    }
+
+    .dynamic-bar {
+      transition: y 0.65s var(--ease-spring), height 0.65s var(--ease-spring), fill 0.35s ease, filter 0.2s ease;
+      cursor: pointer;
+    }
+
+    .dynamic-bar:hover { filter: brightness(1.12); }
+
+    .bar-val-label { transition: y 0.65s var(--ease-spring), fill 0.3s ease; }
+
+    .donut-seg {
+      stroke-dasharray: 0 100;
+      transition: stroke-dasharray 1.05s var(--ease-apple), stroke-width 0.25s ease;
+      cursor: pointer;
+    }
+
+    .donut-seg:hover { stroke-width: 6.6; }
+    .slide.active .donut-seg { stroke-dasharray: var(--dash); }
+
+    .legend-row {
+      display: flex; align-items: center; gap: 9px;
+      padding: 5px 10px; border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.25s var(--ease-spring), background 0.25s ease;
+    }
+
+    .legend-row:hover, .legend-row.highlighted {
+      transform: translateX(6px) scale(1.03);
+      background: rgba(0, 113, 227, 0.09);
+    }
+
+    .eco-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      background: #f5f5f7;
+      color: #6e6e73;
+      border: 1.5px solid #e5e5ea;
+      cursor: pointer;
+      transition: all 0.25s var(--ease-spring);
+    }
+
+    .eco-chip.selected {
+      background: var(--apple-blue-soft);
+      color: var(--apple-blue);
+      border-color: var(--apple-blue);
+      transform: scale(1.04);
+    }
+
+    .profit-fill {
+      width: 0%; height: 100%; border-radius: 99px;
+      transition: width 1.1s var(--ease-apple) 0.35s;
+    }
+
+    .slide.active .profit-fill.vol { width: 19%; }
+    .slide.active .profit-fill.prof { width: 82%; }
+
+    .eco-rev-pill {
+      display: inline-block;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--apple-blue-soft);
+      color: var(--apple-blue);
+      margin-top: 10px;
+    }
+
+    /* Apple Park Photo Carousel (Slide 4) */
+    .park-carousel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 0;
+    }
+
+    .park-stage {
+      position: relative;
+      flex: 1;
+      border-radius: 24px;
+      overflow: hidden;
+      background: #141416;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+    }
+
+    .park-stage img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.7s var(--ease-apple), opacity 0.35s ease;
+    }
+
+    .park-stage:hover img {
+      transform: scale(1.03);
+    }
+
+    .park-gradient-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.28) 0%,
+        rgba(0, 0, 0, 0) 42%,
+        rgba(0, 0, 0, 0.86) 100%
+      );
+      pointer-events: none;
+    }
+
+    .park-top-badge {
+      position: absolute;
+      top: 18px;
+      left: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(20, 20, 22, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      font-size: 12px;
+      font-weight: 600;
+      color: #64d2ff;
+    }
+
+    .park-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: rgba(28, 28, 30, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      color: #ffffff;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 4;
+      transition: transform 0.28s var(--ease-spring), background 0.25s ease, border-color 0.25s ease;
+    }
+
+    .park-nav-btn:hover {
+      background: var(--apple-blue);
+      border-color: #2997ff;
+      transform: translateY(-50%) scale(1.12);
+    }
+
+    .park-nav-btn.prev { left: 18px; }
+    .park-nav-btn.next { right: 18px; }
+
+    .park-caption-bar {
+      position: absolute;
+      bottom: 18px;
+      left: 22px;
+      right: 22px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      z-index: 3;
+    }
+
+    .park-caption-bar h3 {
+      font-size: 22px;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .park-caption-bar p {
+      font-size: 14px;
+      color: #d1d1d6;
+      max-width: 780px;
+    }
+
+    .park-stat-pill {
+      padding: 8px 16px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 13px;
+      font-weight: 700;
+      color: #30d158;
+      white-space: nowrap;
+    }
+
+    .park-thumbs {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      height: 82px;
+      flex-shrink: 0;
+    }
+
+    .park-thumb-btn {
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      background: #1c1c1e;
+      cursor: pointer;
+      padding: 0;
+      transition: transform 0.3s var(--ease-spring), border-color 0.25s ease, opacity 0.25s ease;
+      opacity: 0.62;
+    }
+
+    .park-thumb-btn:hover {
+      opacity: 0.92;
+      transform: translateY(-3px);
+    }
+
+    .park-thumb-btn.active {
+      opacity: 1;
+      border-color: #2997ff;
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 20px rgba(0, 113, 227, 0.35);
+    }
+
+    .park-thumb-btn img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .park-thumb-label {
+      position: absolute;
+      inset: auto 0 0 0;
+      padding: 4px 8px;
+      background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.85));
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 600;
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #controls {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(28, 28, 30, 0.82);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #f5f5f7;
+      font-size: 13px;
+      font-weight: 500;
+      z-index: 100;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s var(--ease-spring);
+    }
+
+    #controls:hover { transform: translateX(-50%) scale(1.03); }
+
+    #controls button {
+      background: rgba(255, 255, 255, 0.12);
+      border: none;
+      color: #fff;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.25s var(--ease-spring), background 0.2s ease;
+    }
+
+    #controls button:hover, #controls button.active-tool {
+      background: var(--apple-blue);
+      transform: scale(1.14);
+    }
+
+    @media print {
+      body { background: none; display: block; height: auto; overflow: visible; }
+      #stage { transform: none !important; width: 100%; height: auto; }
+      .slide {
+        display: flex !important; opacity: 1 !important; visibility: visible !important;
+        transform: none !important; position: relative !important;
+        page-break-after: always; border-radius: 0; box-shadow: none;
+      }
+      #controls, #progress-track, #iphone-modal { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress-track"><div id="progress-fill"></div></div>
+
+<div id="stage">
+
+  <!-- SLIDE 1: TITLE SLIDE -->
+  <section class="slide dark active" data-title="Title Slide">
+    <div class="ambient-glow"></div>
+    <div class="title-slide-content">
+      <svg class="apple-logo-hero anim-item d-1" viewBox="0 0 384 512" aria-label="Apple Logo">
+        <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+      </svg>
+      <h1 class="anim-item d-2">Apple &amp; The iPhone Revolution</h1>
+      <p class="title-subtitle anim-item d-3">From a California Garage to 2.5 Billion iPhones Sold, Smart Business Moves, and an Unstoppable Tech Ecosystem</p>
+      <div class="author-pill anim-item d-4">
+        <span>Project by: <strong>Lazăr Cătălin</strong>, <strong>Lupașcu Mădălin</strong> &amp; <strong>Manea Alin</strong></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 2: APPLE ORIGINS, HISTORY & CONTROVERSIES -->
+  <section class="slide" data-title="Apple History & Origins">
+    <div class="slide-header anim-item d-1" style="margin-bottom: 14px;">
+      <div>
+        <div class="eyebrow">01. Where It All Started</div>
+        <h2>Apple's Story: From a Garage to a Tech Giant</h2>
+      </div>
+      <div class="segmented-control" id="history-tabs">
+        <button class="active" id="htab-btn-milestones" onclick="switchHistoryTab('milestones')">1976 – Present: Big Milestones</button>
+        <button id="htab-btn-scandals" onclick="switchHistoryTab('scandals')">2019 Crash &amp; Major Drama</button>
+      </div>
+    </div>
+
+    <!-- TAB 1: GROWTH MILESTONES -->
+    <div class="grid-5 history-panel active" id="history-panel-milestones">
+      <div class="card timeline-card anim-item d-2">
+        <div>
+          <span class="year-pill">1976 – 1984</span>
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="12" rx="2"/><path d="M2 20h20"/></svg>
+          </div>
+          <h3>The Garage &amp; First Macs</h3>
+          <p>Started April 1, 1976 by <strong>Jobs, Wozniak &amp; Wayne</strong>. <strong>Apple I &amp; II</strong> kicked off personal computers; <strong>Macintosh (1984)</strong> made the mouse &amp; screen icons mainstream.</p>
+        </div>
+      </div>
+
+      <div class="card timeline-card anim-item d-3">
+        <div>
+          <span class="year-pill">1985 – 1997</span>
+          <div class="icon-badge orange">
+            <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          </div>
+          <h3>Near Bankruptcy &amp; Comeback</h3>
+          <p>After Steve Jobs was pushed out in 1985, messy product lines nearly sank Apple—until buying <strong>NeXT in 1997</strong> brought Jobs back to save the company.</p>
+        </div>
+      </div>
+
+      <div class="card timeline-card anim-item d-4">
+        <div>
+          <span class="year-pill">1998 – 2006</span>
+          <div class="icon-badge indigo">
+            <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </div>
+          <h3>iMac, iPod &amp; iTunes</h3>
+          <p>The colorful <strong>iMac G3 (1998)</strong> put Apple back on the map, while <strong>iPod + iTunes (2001)</strong> changed how the world listened to music (400M+ sold).</p>
+        </div>
+      </div>
+
+      <div class="card timeline-card anim-item d-5">
+        <div>
+          <span class="year-pill">2007</span>
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          </div>
+          <h3>The iPhone Game-Changer</h3>
+          <p>Steve Jobs unveiled the <strong>very first iPhone</strong>, turning Apple from a computer company into the king of mobile tech.</p>
+        </div>
+      </div>
+
+      <div class="card timeline-card anim-item d-6">
+        <div>
+          <span class="year-pill">2010 – Present</span>
+          <div class="icon-badge green">
+            <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/></svg>
+          </div>
+          <h3>Ecosystem &amp; Custom Chips</h3>
+          <p>Expansion into <strong>iPad, Apple Watch, AirPods</strong>, Apple's own ultra-fast <strong>M &amp; A chips</strong>, and digital services ($3T+ value).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: 2019 STOCK CRASH & MAJOR SCANDALS -->
+    <div class="grid-4 history-panel" id="history-panel-scandals">
+      <div class="card timeline-card" style="padding: 18px 20px;">
+        <div>
+          <span class="year-pill red">Jan 2019 • -$74B in 1 Day</span>
+          <div class="icon-badge red" style="width:38px;height:38px;margin-bottom:10px;">
+            <svg viewBox="0 0 24 24"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg>
+          </div>
+          <h3 style="font-size:17.5px;">2019 Stock Crash (-10%)</h3>
+          <p style="font-size:13.2px; line-height:1.45;">Tim Cook issued Apple's first sales warning since 2002, cutting Q1 expectations from <strong>~$91B to $84B</strong> due to slower China sales and <strong>$29 battery swaps</strong> delaying upgrades—dropping <strong>~38%</strong> from its peak before bouncing back.</p>
+        </div>
+      </div>
+
+      <div class="card timeline-card" style="padding: 18px 20px;">
+        <div>
+          <span class="year-pill red">2017 – 2020 • $500M Payout</span>
+          <div class="icon-badge orange" style="width:38px;height:38px;margin-bottom:10px;">
+            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="18" height="10" rx="2"/><line x1="22" y1="11" x2="22" y2="13"/><line x1="6" y1="11" x2="6" y2="13"/></svg>
+          </div>
+          <h3 style="font-size:17.5px;">"Batterygate" Slowdowns</h3>
+          <p style="font-size:13.2px; line-height:1.45;">Apple quietly slowed down older iPhones (<strong>iPhone 6, 6s, 7, SE</strong>) via iOS updates to stop random shutdowns without telling users, sparking huge backlash and a <strong>$500M US settlement</strong>.</p>
+        </div>
+      </div>
+
+      <div class="card timeline-card" style="padding: 18px 20px;">
+        <div>
+          <span class="year-pill red">2020 – Present • Legal Battles</span>
+          <div class="icon-badge indigo" style="width:38px;height:38px;margin-bottom:10px;">
+            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 style="font-size:17.5px;">App Store Fees &amp; EU Rules</h3>
+          <p style="font-size:13.2px; line-height:1.45;">Lawsuits over the <strong>30% App Store cut</strong>—including <em>Epic Games v. Apple</em> (the Fortnite ban), a <strong>US antitrust lawsuit</strong>, and <strong>EU rules</strong> forcing Apple to allow third-party app stores and USB-C.</p>
+        </div>
+      </div>
+
+      <div class="card timeline-card" style="padding: 18px 20px;">
+        <div>
+          <span class="year-pill red">2010 – 2012 • Early Drama</span>
+          <div class="icon-badge red" style="width:38px;height:38px;margin-bottom:10px;">
+            <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <h3 style="font-size:17.5px;">Foxconn &amp; "Antennagate"</h3>
+          <p style="font-size:13.2px; line-height:1.45;">Criticism over tough working hours at <strong>Foxconn factories</strong> in China (leading to stricter factory checks) and the <strong>2010 iPhone 4 signal drop</strong> issue (<em>"You're holding it wrong"</em>, solved with free cases).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="history-banner anim-item d-6" onclick="toggleHistoryBanner()">
+      <div style="font-size: 13px; line-height: 1.35;">
+        <span style="color:#ff453a; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; margin-right:6px;">Plot Twists &amp; Setbacks:</span>
+        <span><strong>Jan 2019 Stock Crash</strong> (-$74B in one day) • <strong>Batterygate</strong> ($500M payout) • <strong>Fortnite / App Store Lawsuits &amp; EU Rules</strong></span>
+      </div>
+      <button type="button" class="history-banner-btn" id="history-banner-cta">See 2019 Crash &amp; Drama &#8594;</button>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: COMPANY PROFILE & APPLE PARK HQ -->
+  <section class="slide" data-title="Company Profile & Apple Park HQ">
+    <div class="slide-header anim-item d-1">
+      <div>
+        <div class="eyebrow">02. Apple Today &amp; Headquarters</div>
+        <h2>How Big Is Apple? Scale &amp; Apple Park HQ</h2>
+      </div>
+    </div>
+
+    <div class="kpi-strip">
+      <div class="kpi-box anim-item d-2">
+        <div class="kpi-value count-up" data-target="3.0" data-decimals="1" data-prefix="$" data-suffix="T+">$3.0T+</div>
+        <div class="kpi-label">Company Value on the Stock Market</div>
+      </div>
+      <div class="kpi-box anim-item d-3">
+        <div class="kpi-value count-up" data-target="2.5" data-decimals="1" data-suffix="B+">2.5B+</div>
+        <div class="kpi-label">Active Apple Devices Used Worldwide</div>
+      </div>
+      <div class="kpi-box anim-item d-4">
+        <div class="kpi-value count-up" data-target="530" data-suffix="+">530+</div>
+        <div class="kpi-label">Apple Stores Across 26+ Countries</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card anim-item d-4">
+        <div class="icon-badge">
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <h3>How Apple Works</h3>
+        <ul class="bullet-list">
+          <li><strong>All-in-One Control:</strong> Unlike brands that rely on Windows or Android, Apple builds its own <strong>chips, operating systems, devices, and apps</strong> so everything works together smoothly.</li>
+          <li><strong>Massive Revenue:</strong> Brings in over <strong>$390B+ a year</strong> and ~$100B in profit—making it one of the richest companies in the world.</li>
+          <li><strong>Huge R&amp;D Budget:</strong> Spends <strong>~$30B+ every year</strong> inventing new chips, camera tech, AI features, and materials.</li>
+        </ul>
+      </div>
+
+      <div class="card anim-item d-5">
+        <div class="icon-badge green">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg>
+        </div>
+        <h3>Apple Park HQ ("The Spaceship")</h3>
+        <ul class="bullet-list">
+          <li><strong>Cupertino Campus:</strong> Opened in <strong>2017</strong>—a giant futuristic glass ring covering <strong>175 acres</strong> in California, surrounded by over 9,000 trees.</li>
+          <li><strong>12,000+ Employees:</strong> Home to Apple's designers, chip engineers, executives, and the underground <strong>Steve Jobs Theater</strong> where new iPhones are revealed.</li>
+          <li><strong>100% Green Energy:</strong> Powered by a massive 17 MW rooftop solar array and natural airflow cooling for 9 months of the year.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4: APPLE PARK HQ PHOTO CAROUSEL -->
+  <section class="slide dark" data-title="Apple Park HQ Gallery">
+    <div class="slide-header anim-item d-1" style="margin-bottom: 14px;">
+      <div>
+        <div class="eyebrow">02B. Architectural Tour • Click Arrows or Thumbnails</div>
+        <h2>Inside Apple Park: A $5 Billion Campus</h2>
+      </div>
+      <div style="font-size: 13px; color: #86868b; font-weight: 600;" id="park-counter-badge">Photo 1 of 5</div>
+    </div>
+
+    <div class="park-carousel anim-item d-2">
+      <div class="park-stage">
+        <img id="park-main-img" src="https://commons.wikimedia.org/wiki/Special:FilePath/Aerial_view_of_Apple_Park_dllu.jpg?width=1280" alt="Aerial view of Apple Park ring headquarters" onerror="this.onerror=null;this.src='https://placehold.co/1200x600/1c1c1e/ffffff?text=Apple+Park+Aerial+View';">
+        <div class="park-gradient-overlay"></div>
+
+        <div class="park-top-badge" id="park-top-tag">Cupertino, California • Aerial Panorama</div>
+
+        <button type="button" class="park-nav-btn prev" onclick="stepParkSlide(-1)" title="Previous Photo">&#8249;</button>
+        <button type="button" class="park-nav-btn next" onclick="stepParkSlide(1)" title="Next Photo">&#8250;</button>
+
+        <div class="park-caption-bar">
+          <div>
+            <h3 id="park-photo-title">The Main Ring ("The Spaceship") — 1 Mile Around</h3>
+            <p id="park-photo-desc">Spanning 2.8 million square feet, the circular building is wrapped in the world's largest panels of curved structural glass and topped with a 17 MW solar roof.</p>
+          </div>
+          <div class="park-stat-pill" id="park-photo-stat">2.8M sq ft • $5B Cost</div>
+        </div>
+      </div>
+
+      <div class="park-thumbs" id="park-thumbs-row">
+        <button type="button" class="park-thumb-btn active" onclick="setParkSlide(0)">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Aerial_view_of_Apple_Park_dllu.jpg?width=400" alt="The Main Ring" onerror="this.onerror=null;this.src='https://placehold.co/300x160/1c1c1e/ffffff?text=Main+Ring';">
+          <span class="park-thumb-label">1. Main Ring</span>
+        </button>
+        <button type="button" class="park-thumb-btn" onclick="setParkSlide(1)">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Apple_Park_2022.jpg?width=400" alt="175-Acre Courtyard" onerror="this.onerror=null;this.src='https://placehold.co/300x160/1c1c1e/ffffff?text=Courtyard';">
+          <span class="park-thumb-label">2. 175-Acre Park</span>
+        </button>
+        <button type="button" class="park-thumb-btn" onclick="setParkSlide(2)">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Steve_Jobs_Theater_-_external.jpg?width=400" alt="Steve Jobs Theater Exterior" onerror="this.onerror=null;this.src='https://placehold.co/300x160/1c1c1e/ffffff?text=Jobs+Theater';">
+          <span class="park-thumb-label">3. Jobs Theater</span>
+        </button>
+        <button type="button" class="park-thumb-btn" onclick="setParkSlide(3)">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Steve_Jobs_Theater_-_Auditorium.jpg?width=400" alt="Underground Auditorium" onerror="this.onerror=null;this.src='https://placehold.co/300x160/1c1c1e/ffffff?text=Auditorium';">
+          <span class="park-thumb-label">4. Auditorium</span>
+        </button>
+        <button type="button" class="park-thumb-btn" onclick="setParkSlide(4)">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Apple_Park_Visitor_Center_-_October_2018_-_8839.jpg?width=400" alt="Apple Park Visitor Center" onerror="this.onerror=null;this.src='https://placehold.co/300x160/1c1c1e/ffffff?text=Visitor+Center';">
+          <span class="park-thumb-label">5. Visitor Center</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: THE IPHONE REVOLUTION — WHY IT SOLD INCREDIBLY WELL -->
+  <section class="slide" data-title="The iPhone Revolution">
+    <div class="slide-header anim-item d-1">
+      <div>
+        <div class="eyebrow">03. The iPhone Revolution</div>
+        <h2>The iPhone Revolution: Why 2.5+ Billion Sold</h2>
+      </div>
+    </div>
+
+    <div class="kpi-strip">
+      <div class="kpi-box anim-item d-2">
+        <div class="kpi-value count-up" data-target="2.5" data-decimals="1" data-suffix="B+">2.5B+</div>
+        <div class="kpi-label">Total iPhones Sold Worldwide Since 2007</div>
+      </div>
+      <div class="kpi-box anim-item d-3">
+        <div class="kpi-value count-up" data-target="74" data-suffix=" Days">74 Days</div>
+        <div class="kpi-label">To Reach 1 Million Units Sold After Launch</div>
+      </div>
+      <div class="kpi-box anim-item d-4">
+        <div class="kpi-value count-up" data-target="8" data-suffix="× Jump">8× Jump</div>
+        <div class="kpi-label">Yearly Sales Growth After 2008 App Store Launch</div>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card anim-item d-3">
+        <div class="icon-badge">
+          <svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        </div>
+        <h3>1. "Three Products in One"</h3>
+        <ul class="bullet-list">
+          <li><strong>Before 2007:</strong> Nokia and BlackBerry phones had tiny screens, dozens of plastic buttons, styluses, and slow, broken internet.</li>
+          <li><strong>Multi-Touch Glass:</strong> Steve Jobs combined a widescreen iPod, a phone, and real desktop Safari browsing controlled purely by fingers.</li>
+        </ul>
+      </div>
+
+      <div class="card anim-item d-4">
+        <div class="icon-badge orange">
+          <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <h3>2. Instant Launch-Day Hype</h3>
+        <ul class="bullet-list">
+          <li><strong>$400M+ Free Buzz:</strong> Global media excitement turned the iPhone into a cultural phenomenon months before it even hit shelves.</li>
+          <li><strong>Overnight Lines:</strong> On June 29, 2007, thousands camped outside Apple Stores, buying <strong>270,000 units in 30 hours</strong>.</li>
+        </ul>
+      </div>
+
+      <div class="card anim-item d-5">
+        <div class="icon-badge green">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+        </div>
+        <h3>3. App Store &amp; $199 Price</h3>
+        <ul class="bullet-list">
+          <li><strong>2008 App Store Boom:</strong> Opening the platform to developers created millions of apps and games—making iPhone essential every day.</li>
+          <li><strong>Carrier Subsidies:</strong> Dropping the upfront price from $599 to <strong>$199</strong> fueled mass adoption and <strong>&gt;90% customer loyalty</strong>.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 6: THE ERAS OF IPHONE -->
+  <section class="slide charcoal" data-title="The Eras of iPhone (2007–Present)">
+    <div class="slide-header anim-item d-1">
+      <div>
+        <div class="eyebrow">04. Design Evolution • Click Any Era to Inspect</div>
+        <h2>The Five Eras of iPhone: 2007 to Today</h2>
+      </div>
+    </div>
+
+    <div class="grid-5">
+      <div class="glass-card timeline-card iphone-card anim-item d-2" onclick="openIphoneModal(0)">
+        <div>
+          <div class="real-thumb-box">
+            <img src="https://www.macworld.com/wp-content/uploads/2025/10/original-iphone-2007-1.jpg?quality=50&strip=all" alt="Original iPhone 2007 Front and Back" onerror="this.onerror=null;this.src='https://placehold.co/320x240/ffffff/1d1d1f?text=iPhone+2007';">
+          </div>
+          <span class="year-pill" style="background: rgba(41,151,255,0.2); color: #64d2ff;">Era 1 • 2007</span>
+          <h3>Multi-Touch Begins</h3>
+          <p><strong>3.5" touchscreen</strong>, aluminum &amp; black plastic back, and real Safari web browsing—no stylus needed.</p>
+        </div>
+        <div class="inspect-badge">Front &amp; Back &#8599;</div>
+      </div>
+
+      <div class="glass-card timeline-card iphone-card anim-item d-3" onclick="openIphoneModal(1)">
+        <div>
+          <div class="real-thumb-box dark-bg">
+            <img src="https://www.cnet.com/wp-content/uploads/sites/2/2156b9d0-cbf2-11e2-9a4a-0291187b029a.jpg?fit=1200,675" alt="iPhone 4 Studio Photo" onerror="this.onerror=null;this.src='https://placehold.co/320x240/000000/ffffff?text=iPhone+4';">
+          </div>
+          <span class="year-pill" style="background: rgba(41,151,255,0.2); color: #64d2ff;">Era 2 • 2010</span>
+          <h3>Retina &amp; Glass</h3>
+          <p><strong>Stainless steel &amp; glass</strong> sandwich design, Apple's first custom <strong>A4 chip</strong>, FaceTime, and ultra-sharp Retina screen.</p>
+        </div>
+        <div class="inspect-badge">Front &amp; Back &#8599;</div>
+      </div>
+
+      <div class="glass-card timeline-card iphone-card anim-item d-4" onclick="openIphoneModal(2)">
+        <div>
+          <div class="real-thumb-box">
+            <img src="https://cdsassets.apple.com/live/SZLF0YNV/images/sp/111940_SP705-iphone_6-mul.png" alt="iPhone 6 Front and Back" onerror="this.onerror=null;this.src='https://placehold.co/320x240/ffffff/1d1d1f?text=iPhone+6';">
+          </div>
+          <span class="year-pill" style="background: rgba(41,151,255,0.2); color: #64d2ff;">Era 3 • 2014</span>
+          <h3>Big Screen Boom</h3>
+          <p><strong>4.7" &amp; 5.5" displays</strong>, super-thin aluminum body, Touch ID, and <strong>Apple Pay</strong> (231M sold in one year).</p>
+        </div>
+        <div class="inspect-badge">Front &amp; Back &#8599;</div>
+      </div>
+
+      <div class="glass-card timeline-card iphone-card anim-item d-5" onclick="openIphoneModal(3)">
+        <div>
+          <div class="real-thumb-box">
+            <img src="https://www.apple.com/newsroom/images/product/iphone/standard/iphonex_front_back_glass_big.jpg.large.jpg" alt="iPhone X Front and Back Glass" onerror="this.onerror=null;this.src='https://placehold.co/320x240/ffffff/1d1d1f?text=iPhone+X';">
+          </div>
+          <span class="year-pill" style="background: rgba(41,151,255,0.2); color: #64d2ff;">Era 4 • 2017</span>
+          <h3>All-Screen &amp; Face ID</h3>
+          <p>Edge-to-edge <strong>OLED display</strong>, no Home button, wireless charging glass back, and <strong>Face ID</strong> ($999 flagship).</p>
+        </div>
+        <div class="inspect-badge">Front &amp; Back &#8599;</div>
+      </div>
+
+      <div class="glass-card timeline-card iphone-card anim-item d-6" onclick="openIphoneModal(4)">
+        <div>
+          <div class="real-thumb-box">
+            <img src="https://cdn.flip.ro/device-images/apple_iphone-15-pro_natural-titanium_sell_mip@_320.jpg" alt="iPhone Pro Titanium Front and Back" onerror="this.onerror=null;this.src='https://placehold.co/320x240/ffffff/1d1d1f?text=iPhone+Pro';">
+          </div>
+          <span class="year-pill" style="background: rgba(52,199,89,0.22); color: #30d158;">Era 5 • 2020–Now</span>
+          <h3>5G, Titanium &amp; AI</h3>
+          <p><strong>Titanium frame</strong>, 3nm Pro chips, triple Pro cameras, <strong>Dynamic Island</strong>, and <strong>Apple Intelligence</strong>.</p>
+        </div>
+        <div class="inspect-badge">Inspect Model &#8599;</div>
+      </div>
+    </div>
+
+    <div id="iphone-modal" onclick="if(event.target === this) closeIphoneModal()">
+      <div class="modal-sheet">
+        <button class="modal-close" onclick="closeIphoneModal()" title="Close (ESC)">&#10005;</button>
+
+        <div class="device-showcase" id="device-showcase-box">
+          <div style="font-size:12px; font-weight:700; color:#0071e3; text-transform:uppercase; letter-spacing:0.08em;" id="m-era">2007 Milestone</div>
+          <div class="photo-stage" id="m-render"></div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+              <span id="m-badge" class="year-pill" style="margin:0; background:rgba(41,151,255,0.2); color:#64d2ff;">June 29, 2007</span>
+              <span id="m-price" style="font-size:13px; color:#30d158; font-weight:600;">Launch Price: $499</span>
+            </div>
+            <h2 id="m-title" style="font-size:33px; color:#ffffff; margin-bottom:10px;">Original iPhone (1st Gen)</h2>
+            <p id="m-desc" style="font-size:14.5px; color:#d1d1d6; line-height:1.55;"></p>
+
+            <div class="spec-grid" id="m-specs"></div>
+
+            <div style="background:rgba(41,151,255,0.1); border:1px solid rgba(41,151,255,0.28); border-radius:16px; padding:14px 18px; margin-top:10px;">
+              <div style="font-size:12px; font-weight:700; color:#64d2ff; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:4px;">Why It Mattered</div>
+              <div id="m-impact" style="font-size:14px; color:#f5f5f7; line-height:1.45;"></div>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; padding-top:12px; border-top:1px solid rgba(255,255,255,0.1);">
+            <button onclick="stepIphoneModal(-1)" style="background:rgba(255,255,255,0.1); border:none; color:#fff; padding:8px 16px; border-radius:999px; cursor:pointer; font-weight:600;">&#8592; Previous Era</button>
+            <span id="m-step" style="font-size:13px; color:#86868b;">Era 1 of 5</span>
+            <button onclick="stepIphoneModal(1)" style="background:#0071e3; border:none; color:#fff; padding:8px 16px; border-radius:999px; cursor:pointer; font-weight:600;">Next Era &#8594;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 6: FINANCIAL PERFORMANCE & SALES CHARTS -->
+  <section class="slide" data-title="Sales & Revenue Charts">
+    <div class="slide-header anim-item d-1">
+      <div>
+        <div class="eyebrow">05. Sales &amp; Numbers</div>
+        <h2>iPhone Sales Growth &amp; How Apple Makes Money</h2>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card anim-item d-2" style="display:flex; flex-direction:column; justify-content:space-between;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">
+          <div>
+            <h3 id="chart-title">Yearly iPhone Sales (Millions of Units)</h3>
+            <p id="chart-sub" style="font-size:12.5px;">From 1.4M in 2007 to ~232M+ iPhones every year (165× growth)</p>
+          </div>
+          <div class="segmented-control" id="slide6-metric-tabs">
+            <button class="active" onclick="switchChartMetric('units', this)">Units (M)</button>
+            <button onclick="switchChartMetric('rev', this)">Revenue ($B)</button>
+            <button onclick="switchChartMetric('asp', this)">Avg Price ($)</button>
+          </div>
+        </div>
+
+        <svg viewBox="0 0 520 260" style="width:100%; height:auto; margin: 6px 0;">
+          <line x1="48" y1="218" x2="500" y2="218" stroke="#e5e5ea" stroke-width="1.5"/>
+          <line x1="48" y1="163" x2="500" y2="163" stroke="#f0f0f5" stroke-width="1"/>
+          <line x1="48" y1="108" x2="500" y2="108" stroke="#f0f0f5" stroke-width="1"/>
+          <line x1="48" y1="53" x2="500" y2="53" stroke="#f0f0f5" stroke-width="1"/>
+
+          <text id="y-0" x="40" y="222" font-size="11" fill="#86868b" text-anchor="end">0</text>
+          <text id="y-1" x="40" y="167" font-size="11" fill="#86868b" text-anchor="end">80M</text>
+          <text id="y-2" x="40" y="112" font-size="11" fill="#86868b" text-anchor="end">160M</text>
+          <text id="y-3" x="40" y="57" font-size="11" fill="#86868b" text-anchor="end">240M</text>
+
+          <rect id="bar-0" class="dynamic-bar" x="74" y="212" width="52" height="6" rx="3" fill="#86868b"/>
+          <text id="val-0" class="bar-val-label" x="100" y="204" font-size="12" font-weight="700" fill="#1d1d1f" text-anchor="middle">1.4M</text>
+          <text x="100" y="240" font-size="12" font-weight="600" fill="#6e6e73" text-anchor="middle">2007</text>
+
+          <rect id="bar-1" class="dynamic-bar" x="164" y="168" width="52" height="50" rx="8" fill="#5ac8fa"/>
+          <text id="val-1" class="bar-val-label" x="190" y="160" font-size="12" font-weight="700" fill="#1d1d1f" text-anchor="middle">72.3M</text>
+          <text x="190" y="240" font-size="12" font-weight="600" fill="#6e6e73" text-anchor="middle">2011</text>
+
+          <rect id="bar-2" class="dynamic-bar" x="254" y="59" width="52" height="159" rx="8" fill="#0071e3"/>
+          <text id="val-2" class="bar-val-label" x="280" y="51" font-size="12" font-weight="700" fill="#0071e3" text-anchor="middle">231.2M</text>
+          <text x="280" y="240" font-size="12" font-weight="600" fill="#6e6e73" text-anchor="middle">2015</text>
+
+          <rect id="bar-3" class="dynamic-bar" x="344" y="76" width="52" height="142" rx="8" fill="#5856d6"/>
+          <text id="val-3" class="bar-val-label" x="370" y="68" font-size="12" font-weight="700" fill="#1d1d1f" text-anchor="middle">206.1M</text>
+          <text x="370" y="240" font-size="12" font-weight="600" fill="#6e6e73" text-anchor="middle">2020</text>
+
+          <rect id="bar-4" class="dynamic-bar" x="434" y="58" width="52" height="160" rx="8" fill="#34c759"/>
+          <text id="val-4" class="bar-val-label" x="460" y="50" font-size="12" font-weight="700" fill="#34c759" text-anchor="middle">232.0M</text>
+          <text x="460" y="240" font-size="12" font-weight="600" fill="#6e6e73" text-anchor="middle">Present</text>
+        </svg>
+
+        <p id="chart-insight" style="font-size:13px;"><strong>Key Takeaway:</strong> Because so many buyers pick higher-end <strong>Pro &amp; Pro Max</strong> models (avg price &gt; $900), iPhone brings in over <strong>$201B/year</strong>.</p>
+      </div>
+
+      <div class="card anim-item d-3" style="display:flex; flex-direction:column; justify-content:space-between;">
+        <div>
+          <h3>Where Apple's ~$391B Revenue Comes From</h3>
+          <p style="font-size:13px;">Hover over any slice or label to see its share</p>
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:space-around;">
+          <svg viewBox="0 0 42 42" style="width:225px; height:225px;">
+            <circle cx="21" cy="21" r="15.915" fill="transparent" stroke="#f2f2f7" stroke-width="5.5"/>
+            <circle class="donut-seg" onmouseenter="highlightSegment('52%', 'iPhone ($201B)', '#0071e3', 0)" style="--dash: 52 48;" cx="21" cy="21" r="15.915" fill="transparent" stroke="#0071e3" stroke-width="5.5" stroke-dashoffset="25"/>
+            <circle class="donut-seg" onmouseenter="highlightSegment('26%', 'Services ($96B)', '#34c759', 1)" style="--dash: 26 74; transition-delay:0.15s;" cx="21" cy="21" r="15.915" fill="transparent" stroke="#34c759" stroke-width="5.5" stroke-dashoffset="73"/>
+            <circle class="donut-seg" onmouseenter="highlightSegment('9%', 'Wearables ($37B)', '#ff9500', 2)" style="--dash: 9 91; transition-delay:0.25s;" cx="21" cy="21" r="15.915" fill="transparent" stroke="#ff9500" stroke-width="5.5" stroke-dashoffset="47"/>
+            <circle class="donut-seg" onmouseenter="highlightSegment('7%', 'Mac ($30B)', '#5856d6', 3)" style="--dash: 7 93; transition-delay:0.35s;" cx="21" cy="21" r="15.915" fill="transparent" stroke="#5856d6" stroke-width="5.5" stroke-dashoffset="38"/>
+            <circle class="donut-seg" onmouseenter="highlightSegment('6%', 'iPad ($27B)', '#00c7be', 4)" style="--dash: 6 94; transition-delay:0.45s;" cx="21" cy="21" r="15.915" fill="transparent" stroke="#00c7be" stroke-width="5.5" stroke-dashoffset="31"/>
+            <text id="donut-pct" x="21" y="20" font-size="4.4" font-weight="700" fill="#0071e3" text-anchor="middle">52%</text>
+            <text id="donut-lbl" x="21" y="24.2" font-size="2.1" font-weight="600" fill="#6e6e73" text-anchor="middle">iPhone ($201B)</text>
+          </svg>
+
+          <div style="display:flex; flex-direction:column; gap:5px; font-size:13.5px;">
+            <div class="legend-row highlighted" id="leg-0" onmouseenter="highlightSegment('52%', 'iPhone ($201B)', '#0071e3', 0)">
+              <span style="width:12px;height:12px;border-radius:4px;background:#0071e3;"></span>
+              <span><strong>iPhone:</strong> 52%</span>
+            </div>
+            <div class="legend-row" id="leg-1" onmouseenter="highlightSegment('26%', 'Services ($96B)', '#34c759', 1)">
+              <span style="width:12px;height:12px;border-radius:4px;background:#34c759;"></span>
+              <span><strong>Services:</strong> 26%</span>
+            </div>
+            <div class="legend-row" id="leg-2" onmouseenter="highlightSegment('9%', 'Wearables ($37B)', '#ff9500', 2)">
+              <span style="width:12px;height:12px;border-radius:4px;background:#ff9500;"></span>
+              <span><strong>Wearables:</strong> 9%</span>
+            </div>
+            <div class="legend-row" id="leg-3" onmouseenter="highlightSegment('7%', 'Mac ($30B)', '#5856d6', 3)">
+              <span style="width:12px;height:12px;border-radius:4px;background:#5856d6;"></span>
+              <span><strong>Mac:</strong> 7%</span>
+            </div>
+            <div class="legend-row" id="leg-4" onmouseenter="highlightSegment('6%', 'iPad ($27B)', '#00c7be', 4)">
+              <span style="width:12px;height:12px;border-radius:4px;background:#00c7be;"></span>
+              <span><strong>iPad:</strong> 6%</span>
+            </div>
+          </div>
+        </div>
+
+        <p style="font-size:13px;"><strong>High-Profit Services:</strong> Digital services (App Store, iCloud, Apple Pay) have a <strong>~74% profit margin</strong>—almost double hardware.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 7: ECONOMIC STRATEGIES -->
+  <section class="slide" data-title="Business & Economics Playbook">
+    <div class="slide-header anim-item d-1">
+      <div>
+        <div class="eyebrow">06. Business &amp; Economics Playbook</div>
+        <h2>Smart Business Moves Behind Apple's Profits</h2>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card anim-item d-2" style="display:flex; flex-direction:column; justify-content:space-between;">
+        <div>
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <h3>1. Premium Pricing (Price Skimming)</h3>
+          <p style="margin-bottom:10px;">Instead of fighting cheap price wars, Apple sells clear tiers (<strong>Standard vs. Pro/Pro Max</strong> &amp; storage upgrades), keeping a strong <strong>45–47% profit margin</strong>.</p>
+        </div>
+
+        <div style="background:#f5f5f7; border-radius:14px; padding:14px;">
+          <div style="font-size:12px; font-weight:600; margin-bottom:8px;">Global Smartphone Market: Sales Share vs. Profit Share</div>
+          <div style="font-size:12px; color:#6e6e73; margin-bottom:4px;">Share of Phones Sold (~19%)</div>
+          <div style="height:10px; background:#e5e5ea; border-radius:99px; overflow:hidden; margin-bottom:10px;">
+            <div class="profit-fill vol" style="background:#5ac8fa;"></div>
+          </div>
+          <div style="font-size:12px; color:#0071e3; font-weight:600; margin-bottom:4px;">Share of Industry Profits (&gt;80%)</div>
+          <div style="height:10px; background:#e5e5ea; border-radius:99px; overflow:hidden;">
+            <div class="profit-fill prof" style="background:#0071e3;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card anim-item d-3">
+        <div class="icon-badge green">
+          <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <h3>2. Building Everything In-House</h3>
+        <ul class="bullet-list">
+          <li><strong>Custom Apple Chips:</strong> Designing its own <strong>A- &amp; M-series chips</strong> means Apple doesn't pay middleman markups and gets better speed &amp; battery life.</li>
+          <li><strong>Bulk Buying Power:</strong> Ordering 230M+ iPhones a year lets Apple negotiate top deals and exclusive parts from suppliers.</li>
+          <li><strong>Fast Inventory:</strong> Apple turns over stock in under 10 days, avoiding warehouses full of unsold phones.</li>
+        </ul>
+      </div>
+
+      <div class="card anim-item d-4" style="display:flex; flex-direction:column; justify-content:space-between;">
+        <div>
+          <div class="icon-badge indigo">
+            <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <h3>3. Ecosystem Lock-In &amp; Loyalty</h3>
+          <p style="font-size:13.5px; margin-bottom:10px;">Once you use iMessage, AirDrop, and iCloud, switching to Android feels annoying. Click devices to test customer loyalty:</p>
+          <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;">
+            <span class="eco-chip selected" onclick="toggleEco(this)">iPhone</span>
+            <span class="eco-chip selected" onclick="toggleEco(this)">AirPods</span>
+            <span class="eco-chip selected" onclick="toggleEco(this)">Apple Watch</span>
+            <span class="eco-chip" onclick="toggleEco(this)">MacBook</span>
+            <span class="eco-chip" onclick="toggleEco(this)">iCloud+</span>
+          </div>
+        </div>
+
+        <div style="background:#f5f5f7; border-radius:14px; padding:13px 15px;">
+          <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:600; margin-bottom:6px;">
+            <span>Likelihood to Stay With Apple</span>
+            <span id="eco-score" style="color:#0071e3;">91% (High Lock-in)</span>
+          </div>
+          <div style="height:10px; background:#e5e5ea; border-radius:99px; overflow:hidden;">
+            <div id="eco-bar" style="width:91%; height:100%; background:linear-gradient(90deg, #5856d6, #0071e3); border-radius:99px; transition:width 0.45s var(--ease-spring);"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 8: MARKETING, BRANDING & CONSUMER PSYCHOLOGY -->
+  <section class="slide" data-title="Branding & Marketing">
+    <div class="slide-header anim-item d-1">
+      <div>
+        <div class="eyebrow">07. Branding &amp; Marketing</div>
+        <h2>How Apple Markets Desire &amp; Builds Hype</h2>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="card anim-item d-2">
+        <div class="icon-badge">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <h3>1. Selling Vibes, Not Just Specs</h3>
+        <ul class="bullet-list">
+          <li><strong>Emotion Over Numbers:</strong> Apple rarely brags about RAM or gigahertz—instead, ads focus on <strong>creativity, privacy, and lifestyle</strong>, so people gladly pay full price.</li>
+          <li><strong>"Shot on iPhone" Billboards:</strong> Real photos taken by everyday users turn customers into free advertising around the world.</li>
+        </ul>
+      </div>
+
+      <div class="card anim-item d-3">
+        <div class="icon-badge orange">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <h3>2. Secret Launches &amp; Keynote Hype</h3>
+        <ul class="bullet-list">
+          <li><strong>September Launch Events:</strong> Apple's sleek video keynotes get <strong>billions of views and free news coverage</strong> globally without traditional ad spend.</li>
+          <li><strong>Scarcity &amp; FOMO:</strong> Strict pre-launch secrecy and launch-week sellouts trigger FOMO (Fear Of Missing Out) and make new iPhones feel must-have.</li>
+        </ul>
+      </div>
+
+      <div class="card anim-item d-4">
+        <div class="icon-badge green">
+          <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <h3>3. Iconic Stores &amp; Resale Value</h3>
+        <ul class="bullet-list">
+          <li><strong>Apple Stores as Hangouts:</strong> Glass-walled flagship stores let anyone test devices hands-free and get fast Genius Bar help, earning top sales per square foot.</li>
+          <li><strong>High Second-Hand Value:</strong> Used iPhones hold their price way better than rival phones, making yearly trade-in upgrades much cheaper.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card anim-item d-5" style="margin-top:16px; padding:17px 26px; display:flex; align-items:center; justify-content:space-between; background:#1d1d1f; color:#fff;">
+      <span style="font-size:15.5px; font-weight:500;">"People don't buy what you do; they buy why you do it." — Apple's <strong>Think Different</strong> mindset</span>
+      <span style="font-size:13px; color:#2997ff; font-weight:600;">#1 Most Valuable Global Brand (~$500B+ Brand Value)</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 9: THE BROADER APPLE ECOSYSTEM (MACBOOK, IMAC, APPLE WATCH, AIRPODS, IPAD & SERVICES) -->
+  <section class="slide" data-title="The Broader Apple Ecosystem">
+    <div class="slide-header anim-item d-1" style="margin-bottom: 14px;">
+      <div>
+        <div class="eyebrow">08. Beyond the iPhone</div>
+        <h2>The Rest of the Apple Ecosystem</h2>
+      </div>
+    </div>
+
+    <div class="grid-4">
+      <div class="card anim-item d-2" style="display:flex; flex-direction:column; justify-content:space-between; padding: 20px;">
+        <div>
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+          </div>
+          <h3>MacBook &amp; iMac</h3>
+          <p style="font-size:13.5px; margin-bottom:8px;"><strong>MacBook Air, MacBook Pro &amp; iMac</strong> run on Apple's own <strong>M1–M4 chips</strong>, offering crazy battery life and quiet performance.</p>
+          <p style="font-size:13px;"><strong>Works Like Magic:</strong> AirDrop, shared copy-paste, and iPhone Mirroring link Mac &amp; iPhone effortlessly.</p>
+        </div>
+        <span class="eco-rev-pill">~$30B Yearly Sales</span>
+      </div>
+
+      <div class="card anim-item d-3" style="display:flex; flex-direction:column; justify-content:space-between; padding: 20px;">
+        <div>
+          <div class="icon-badge orange">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6"/><polyline points="12 9 12 12 14 13"/><path d="M9 2h6l1 4H8l1-4z"/><path d="M8 18h8l-1 4H9l-1-4z"/></svg>
+          </div>
+          <h3>Apple Watch &amp; AirPods</h3>
+          <p style="font-size:13.5px; margin-bottom:8px;">The world's <strong>#1 smartwatch</strong> and <strong>#1 wireless earbuds</strong>, built as must-have sidekicks for iPhone.</p>
+          <p style="font-size:13px;"><strong>Instant Pairing:</strong> One-tap setup, fitness &amp; heart tracking, Apple Pay on your wrist, and Spatial Audio.</p>
+        </div>
+        <span class="eco-rev-pill" style="background:var(--apple-orange-soft); color:var(--apple-orange);">~$37B Wearables Sales</span>
+      </div>
+
+      <div class="card anim-item d-4" style="display:flex; flex-direction:column; justify-content:space-between; padding: 20px;">
+        <div>
+          <div class="icon-badge indigo">
+            <svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          </div>
+          <h3>iPad &amp; Vision Pro</h3>
+          <p style="font-size:13.5px; margin-bottom:8px;"><strong>iPad Pro, iPad Air &amp; Apple Pencil</strong> blend touchscreen simplicity with laptop power for school, drawing, and editing.</p>
+          <p style="font-size:13px;"><strong>Shared App World:</strong> Uses the same iOS apps while testing the future of spatial computing with <strong>Apple Vision Pro</strong>.</p>
+        </div>
+        <span class="eco-rev-pill" style="background:var(--apple-indigo-soft); color:var(--apple-indigo);">~$27B Yearly Sales</span>
+      </div>
+
+      <div class="card anim-item d-5" style="display:flex; flex-direction:column; justify-content:space-between; padding: 20px;">
+        <div>
+          <div class="icon-badge green">
+            <svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+          </div>
+          <h3>Services &amp; Subscriptions</h3>
+          <p style="font-size:13.5px; margin-bottom:8px;"><strong>App Store, iCloud+, Apple Pay, Apple Music, Apple TV+ &amp; AppleCare+</strong> keep earning money long after you buy a device.</p>
+          <p style="font-size:13px;"><strong>Steady Cash Machine:</strong> Over <strong>1 billion paid subscriptions</strong> bringing in predictable profit every month.</p>
+        </div>
+        <span class="eco-rev-pill" style="background:var(--apple-green-soft); color:var(--apple-green);">~$96B Sales (~74% Margin)</span>
+      </div>
+    </div>
+
+    <div class="card anim-item d-6" style="margin-top:16px; padding:16px 24px; display:flex; align-items:center; justify-content:space-between; background:#1d1d1f; color:#fff;">
+      <div style="font-size:14.5px; line-height:1.4;">
+        <strong style="color:#2997ff;">The "Halo Effect":</strong> iPhone is the gateway product—once someone buys an iPhone, they're way more likely to buy <strong>AirPods, Apple Watch, MacBook, or iMac</strong> next.
+      </div>
+      <span style="font-size:12.5px; color:#30d158; font-weight:700; white-space:nowrap; margin-left:16px;">1B+ Paid Subscriptions</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 10: CONCLUSION & KEY TAKEAWAYS -->
+  <section class="slide dark" data-title="Conclusion & Takeaways">
+    <div class="slide-header anim-item d-1">
+      <div>
+        <div class="eyebrow">09. Wrap-Up</div>
+        <h2>Conclusion: Why Apple &amp; iPhone Won</h2>
+      </div>
+      <svg style="width:34px; height:42px; fill:#ffffff;" viewBox="0 0 384 512" aria-label="Apple Logo">
+        <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+      </svg>
+    </div>
+
+    <div class="grid-3">
+      <div class="glass-card anim-item d-2">
+        <div class="icon-badge glass" style="font-weight:700; font-size:17px;">01</div>
+        <h3>Game-Changing Products</h3>
+        <p>From the 1984 Mac and 2001 iPod to <strong>2.5B+ iPhones</strong>, Apple repeatedly reinvented tech with simple touchscreens, custom chips, and clean design.</p>
+      </div>
+
+      <div class="glass-card anim-item d-3">
+        <div class="icon-badge glass" style="font-weight:700; font-size:17px;">02</div>
+        <h3>Smart Business &amp; Pricing</h3>
+        <p>Premium pricing (&gt;80% of smartphone profits), building chips in-house, and strong brand loyalty keep Apple's profits unmatched.</p>
+      </div>
+
+      <div class="glass-card anim-item d-4">
+        <div class="icon-badge glass" style="font-weight:700; font-size:17px;">03</div>
+        <h3>Connected Ecosystem</h3>
+        <p>Seamless teamwork across <strong>iPhone, MacBook, iMac, Apple Watch, AirPods, iPad, and Services</strong> keeps &gt;90% of users coming back.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 11: THANK YOU SLIDE -->
+  <section class="slide dark" data-title="Thank You">
+    <div class="ambient-glow"></div>
+    <div class="title-slide-content">
+      <svg class="apple-logo-hero anim-item d-1" viewBox="0 0 384 512" aria-label="Apple Logo">
+        <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+      </svg>
+      <h1 class="anim-item d-2">Thank You for Your Attention!</h1>
+      <div class="author-pill anim-item d-3" style="margin-top: 28px;">
+        <span><strong>Lazăr Cătălin</strong> &bull; <strong>Lupașcu Mădălin</strong> &bull; <strong>Manea Alin</strong></span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div id="controls">
+  <button id="prevBtn" title="Previous Slide (Left Arrow)">&#8592;</button>
+  <button id="nextBtn" title="Next Slide (Right Arrow / Space)">&#8594;</button>
+  <button id="fsBtn" title="Toggle Fullscreen (F)">&#x26F6;</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const progressFill = document.getElementById('progress-fill');
+  const stage = document.getElementById('stage');
+  const fsBtn = document.getElementById('fsBtn');
+  let current = 0;
+
+  /* Responsive stage scaling so the 1280x720 deck fits any screen or preview window */
+  function fitStage() {
+    const isPseudo = document.body.classList.contains('pseudo-fullscreen');
+    const padX = isPseudo ? 0 : 24;
+    const padY = isPseudo ? 0 : 68;
+    const availW = Math.max(window.innerWidth - padX, 320);
+    const availH = Math.max(window.innerHeight - padY, 200);
+    const scale = Math.min(availW / 1280, availH / 720);
+    stage.style.transform = `scale(${scale})`;
+  }
+
+  window.addEventListener('resize', fitStage);
+  window.addEventListener('load', fitStage);
+  fitStage();
+
+  /* Animate KPI numbers when entering a slide */
+  function animateCounters(slideEl) {
+    slideEl.querySelectorAll('.count-up').forEach(el => {
+      const target = parseFloat(el.dataset.target);
+      const decimals = parseInt(el.dataset.decimals || '0', 10);
+      const prefix = el.dataset.prefix || '';
+      const suffix = el.dataset.suffix || '';
+      const duration = 900;
+      const start = performance.now();
+
+      function tick(now) {
+        const p = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        const val = (target * eased).toFixed(decimals);
+        el.textContent = `${prefix}${val}${suffix}`;
+        if (p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+
+  /* Navigate between slides */
+  function showSlide(index) {
+    if (index < 0 || index >= slides.length) return;
+    const goingForward = index >= current;
+
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'prev-exit', 'next-exit');
+      if (i === current && i !== index) {
+        s.classList.add(goingForward ? 'prev-exit' : 'next-exit');
+      } else if (i < index) {
+        s.classList.add('prev-exit');
+      } else if (i > index) {
+        s.classList.add('next-exit');
+      }
+    });
+
+    slides[index].classList.remove('prev-exit', 'next-exit');
+    slides[index].classList.add('active');
+    animateCounters(slides[index]);
+
+    current = index;
+    progressFill.style.width = `${((current + 1) / slides.length) * 100}%`;
+  }
+
+  /* Subtle Apple-style cursor spotlight on cards */
+  document.querySelectorAll('.card, .glass-card').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+      card.style.setProperty('--my', `${e.clientY - rect.top}px`);
+    });
+  });
+
+  /* Slide 2 History & Scandals tab switcher */
+  let activeHistoryTab = 'milestones';
+
+  function switchHistoryTab(tab) {
+    activeHistoryTab = tab;
+    const isScandals = tab === 'scandals';
+
+    document.getElementById('htab-btn-milestones').classList.toggle('active', !isScandals);
+    document.getElementById('htab-btn-scandals').classList.toggle('active', isScandals);
+
+    document.getElementById('history-panel-milestones').classList.toggle('active', !isScandals);
+    document.getElementById('history-panel-scandals').classList.toggle('active', isScandals);
+
+    const cta = document.getElementById('history-banner-cta');
+    if (cta) {
+      cta.innerHTML = isScandals
+        ? '&#8592; Back to Big Milestones'
+        : 'See 2019 Crash &amp; Drama &#8594;';
+    }
+  }
+
+  function toggleHistoryBanner() {
+    switchHistoryTab(activeHistoryTab === 'milestones' ? 'scandals' : 'milestones');
+  }
+
+  /* Slide 5 iPhone Eras Interactive Modal */
+  const iphoneModels = [
+    {
+      era: "2007 Milestone",
+      badge: "June 29, 2007",
+      price: "Launch Price: $499 (4GB) / $599 (8GB)",
+      title: "Original iPhone (1st Gen)",
+      desc: "Introduced by Steve Jobs as 'three revolutionary products in one': a widescreen iPod with touch controls, a revolutionary mobile phone, and a breakthrough internet communicator.",
+      specs: [
+        { label: "Display", val: "3.5\" Multi-Touch LCD (320×480)" },
+        { label: "Materials", val: "Anodized Aluminum & Black Plastic" },
+        { label: "Camera", val: "2.0 MP Rear Camera (No Video)" },
+        { label: "Software", val: "iPhone OS 1.0 • Desktop Safari" }
+      ],
+      impact: "Replaced physical BlackBerry keyboards with capacitive multi-touch gestures and kicked off the smartphone revolution.",
+      photo: "https://www.macworld.com/wp-content/uploads/2025/10/original-iphone-2007-1.jpg?quality=50&strip=all",
+      darkStage: false
+    },
+    {
+      era: "2010 Design Leap",
+      badge: "June 24, 2010",
+      price: "Launch Price: $199 (Contract) / $599",
+      title: "iPhone 4 — Retina & Glass",
+      desc: "Redesigned from the ground up with flat aluminosilicate glass panels, a CNC-machined stainless steel antenna band, and Apple's first in-house A4 chip.",
+      specs: [
+        { label: "Display", val: "3.5\" Retina IPS (326 ppi)" },
+        { label: "Processor", val: "Apple A4 (First Custom Chip)" },
+        { label: "Cameras", val: "5 MP 720p HD + Front FaceTime" },
+        { label: "Thickness", val: "9.3 mm (Thinnest Phone in 2010)" }
+      ],
+      impact: "Set the benchmark for smartphone craftsmanship and started Apple's custom silicon advantage.",
+      photo: "https://www.cnet.com/wp-content/uploads/sites/2/2156b9d0-cbf2-11e2-9a4a-0291187b029a.jpg?fit=1200,675",
+      darkStage: true
+    },
+    {
+      era: "2014 Supercycle",
+      badge: "September 19, 2014",
+      price: "Launch Price: $649 / $749 (Plus)",
+      title: "iPhone 6 & 6 Plus",
+      desc: "Apple's move to larger 4.7-inch and 5.5-inch curved-edge displays unlocked massive global demand—especially across Asia—and debuted Apple Pay.",
+      specs: [
+        { label: "Display", val: "4.7\" & 5.5\" Retina HD Displays" },
+        { label: "Processor", val: "Apple A8 64-Bit Chip" },
+        { label: "Payments", val: "NFC + Touch ID (Apple Pay)" },
+        { label: "Record Sales", val: "231.2 Million Units Sold in FY15" }
+      ],
+      impact: "Triggered the biggest smartphone sales surge in history, selling over 220 million units of the iPhone 6 series alone.",
+      photo: "https://cdsassets.apple.com/live/SZLF0YNV/images/sp/111940_SP705-iphone_6-mul.png",
+      darkStage: false
+    },
+    {
+      era: "2017 10th Anniversary",
+      badge: "November 3, 2017",
+      price: "Launch Price: $999 (New Tier)",
+      title: "iPhone X — All-Screen & Face ID",
+      desc: "Eliminated the iconic Home button in favor of an edge-to-edge Super Retina OLED display, gesture navigation, surgical-grade stainless steel, and 3D Face ID.",
+      specs: [
+        { label: "Display", val: "5.8\" Super Retina OLED (HDR)" },
+        { label: "Security", val: "TrueDepth Camera • Face ID" },
+        { label: "Processor", val: "Apple A11 Bionic (Neural Engine)" },
+        { label: "Charging", val: "Glass Back with Qi Wireless" }
+      ],
+      impact: "Proved customers would pay $999+ for a flagship smartphone, lifting Apple's average selling price and profits.",
+      photo: "https://www.apple.com/newsroom/images/product/iphone/standard/iphonex_front_back_glass_big.jpg.large.jpg",
+      darkStage: false
+    },
+    {
+      era: "2020–Present Flagship",
+      badge: "Current Generation",
+      price: "Pro Lineup: $999 – $1,199+",
+      title: "iPhone Pro — Titanium, 5G & AI",
+      desc: "Combines aerospace-grade Grade 5 titanium, 3-nanometer Pro chips, Dynamic Island, USB-C, tetraprism 5x optical zoom, and on-device Apple Intelligence.",
+      specs: [
+        { label: "Chassis", val: "Brushed Grade 5 Titanium + Ceramic" },
+        { label: "Processor", val: "3nm A-Series Pro + Ray Tracing" },
+        { label: "Pro Camera", val: "48 MP Fusion + 5x Telephoto" },
+        { label: "Intelligence", val: "On-Device Apple Intelligence" }
+      ],
+      impact: "Drives over $200B in annual iPhone revenue while powering Apple's 2.5B+ active device ecosystem.",
+      photo: "https://cdn.flip.ro/device-images/apple_iphone-15-pro_natural-titanium_sell_mip@_320.jpg",
+      darkStage: false
+    }
+  ];
+
+  let activeModelIdx = 0;
+
+  function renderIphoneModal(idx) {
+    activeModelIdx = idx;
+    const m = iphoneModels[idx];
+    document.getElementById('m-era').textContent = m.era;
+    document.getElementById('m-badge').textContent = m.badge;
+    document.getElementById('m-price').textContent = m.price;
+    document.getElementById('m-title').textContent = m.title;
+    document.getElementById('m-desc').textContent = m.desc;
+    document.getElementById('m-impact').textContent = m.impact;
+    document.getElementById('m-step').textContent = `Era ${idx + 1} of ${iphoneModels.length}`;
+
+    const showcase = document.getElementById('device-showcase-box');
+    showcase.classList.toggle('dark-stage', Boolean(m.darkStage));
+
+    const stageEl = document.getElementById('m-render');
+    stageEl.innerHTML = `<img src="${m.photo}" alt="${m.title}" onerror="this.onerror=null;this.src='https://placehold.co/360x420/1c1c1e/ffffff?text=${encodeURIComponent(m.title)}';">`;
+
+    document.getElementById('m-specs').innerHTML = m.specs.map(s => `
+      <div class="spec-tile">
+        <div class="s-label">${s.label}</div>
+        <div class="s-val">${s.val}</div>
+      </div>
+    `).join('');
+  }
+
+  function openIphoneModal(idx) {
+    renderIphoneModal(idx);
+    document.getElementById('iphone-modal').classList.add('open');
+  }
+
+  function closeIphoneModal() {
+    document.getElementById('iphone-modal').classList.remove('open');
+  }
+
+  function stepIphoneModal(dir) {
+    const next = (activeModelIdx + dir + iphoneModels.length) % iphoneModels.length;
+    renderIphoneModal(next);
+  }
+
+  /* Slide 6 Interactive Bar & Donut Charts */
+  const chartDatasets = {
+    units: {
+      title: "Yearly iPhone Sales (Millions of Units)",
+      sub: "From 1.4M in 2007 to ~232M+ iPhones every year (165× growth)",
+      yTicks: ["0", "80M", "160M", "240M"],
+      max: 240,
+      values: [1.4, 72.3, 231.2, 206.1, 232.0],
+      labels: ["1.4M", "72.3M", "231.2M", "206.1M", "232.0M"],
+      insight: "<strong>Key Takeaway:</strong> Because so many buyers pick higher-end <strong>Pro &amp; Pro Max</strong> models (avg price &gt; $900), iPhone brings in over <strong>$201B/year</strong>."
+    },
+    rev: {
+      title: "Yearly iPhone Revenue ($ Billions)",
+      sub: "Massive revenue growth powered by global demand & Pro models",
+      yTicks: ["$0B", "$75B", "$150B", "$225B"],
+      max: 225,
+      values: [0.6, 47.0, 155.0, 137.8, 201.2],
+      labels: ["$0.6B", "$47.0B", "$155.0B", "$137.8B", "$201.2B"],
+      insight: "<strong>Huge Scale:</strong> The iPhone alone brings in over <strong>$201 billion a year</strong>—more money than Microsoft, Disney, or Nike."
+    },
+    asp: {
+      title: "Average iPhone Selling Price (USD)",
+      sub: "Steady price growth thanks to Pro & Pro Max upgrades",
+      yTicks: ["$0", "$350", "$700", "$1,050"],
+      max: 1050,
+      values: [530, 625, 670, 785, 925],
+      labels: ["$530", "$625", "$670", "$785", "$925"],
+      insight: "<strong>Smart Upselling:</strong> More buyers choose <strong>iPhone Pro &amp; Pro Max</strong> every year, pushing the average price past $900."
+    }
+  };
+
+  function switchChartMetric(metricKey, btnEl) {
+    const data = chartDatasets[metricKey];
+    if (!data) return;
+
+    document.querySelectorAll('#slide6-metric-tabs button').forEach(b => b.classList.remove('active'));
+    if (btnEl) btnEl.classList.add('active');
+
+    document.getElementById('chart-title').textContent = data.title;
+    document.getElementById('chart-sub').textContent = data.sub;
+    document.getElementById('chart-insight').innerHTML = data.insight;
+
+    data.yTicks.forEach((tick, i) => {
+      document.getElementById(`y-${i}`).textContent = tick;
+    });
+
+    const baseLineY = 218;
+    const maxHeight = 165;
+
+    data.values.forEach((val, i) => {
+      const bar = document.getElementById(`bar-${i}`);
+      const lbl = document.getElementById(`val-${i}`);
+      const h = Math.max(6, Math.round((val / data.max) * maxHeight));
+      const y = baseLineY - h;
+      bar.setAttribute('y', y);
+      bar.setAttribute('height', h);
+      lbl.setAttribute('y', y - 8);
+      lbl.textContent = data.labels[i];
+    });
+  }
+
+  function highlightSegment(pct, label, color, idx) {
+    const pctEl = document.getElementById('donut-pct');
+    const lblEl = document.getElementById('donut-lbl');
+    pctEl.textContent = pct;
+    pctEl.setAttribute('fill', color);
+    lblEl.textContent = label;
+
+    for (let i = 0; i < 5; i++) {
+      const row = document.getElementById(`leg-${i}`);
+      if (row) row.classList.toggle('highlighted', i === idx);
+    }
+  }
+
+  /* Slide 7 Interactive Ecosystem Lock-In Calculator */
+  function toggleEco(chipEl) {
+    chipEl.classList.toggle('selected');
+    const count = document.querySelectorAll('.eco-chip.selected').length;
+    const map = [
+      { pct: 45, text: "45% (Easy to Switch)" },
+      { pct: 72, text: "72% (Moderate Lock-in)" },
+      { pct: 84, text: "84% (Strong Lock-in)" },
+      { pct: 91, text: "91% (High Lock-in)" },
+      { pct: 96, text: "96% (Very High Lock-in)" },
+      { pct: 99, text: "99% (Total Ecosystem Lock-in)" }
+    ];
+    const state = map[count] || map[0];
+    document.getElementById('eco-score').textContent = state.text;
+    document.getElementById('eco-bar').style.width = `${state.pct}%`;
+  }
+
+  /* Apple Park HQ Photo Carousel Controller */
+  const parkPhotos = [
+    {
+      tag: "Cupertino, California • Aerial Panorama",
+      title: "The Main Ring (\"The Spaceship\") — 1 Mile Around",
+      desc: "Spanning 2.8 million square feet, the circular building is wrapped in the world's largest panels of curved structural glass and topped with a 17 MW solar roof.",
+      stat: "2.8M sq ft • $5B Cost",
+      src: "https://commons.wikimedia.org/wiki/Special:FilePath/Aerial_view_of_Apple_Park_dllu.jpg?width=1280"
+    },
+    {
+      tag: "Green Landscape • Drone View",
+      title: "175-Acre Nature Reserve & Inner Courtyard",
+      desc: "Apple transformed an old asphalt parking lot into a lush forest with over 9,000 drought-resistant trees, fruit orchards, a central pond, and 2 miles of running paths.",
+      stat: "9,000+ Trees • 80% Green Space",
+      src: "https://commons.wikimedia.org/wiki/Special:FilePath/Apple_Park_2022.jpg?width=1280"
+    },
+    {
+      tag: "Keynote Venue • Architectural Landmark",
+      title: "Steve Jobs Theater — Seamless Glass Pavilion",
+      desc: "Sitting on a hilltop overlooking the ring, this 20-foot-tall glass cylinder has zero visible support columns and holds up the world's largest freestanding carbon-fiber roof.",
+      stat: "165 ft Carbon-Fiber Roof",
+      src: "https://commons.wikimedia.org/wiki/Special:FilePath/Steve_Jobs_Theater_-_external.jpg?width=1280"
+    },
+    {
+      tag: "Four Stories Underground • Keynote Stage",
+      title: "1,000-Seat Underground Keynote Auditorium",
+      desc: "Hidden beneath the glass lobby, this leather-and-oak auditorium hosts Apple's biggest product launches and features a rotating glass elevator.",
+      stat: "1,000 Seats • 4 Floors Deep",
+      src: "https://commons.wikimedia.org/wiki/Special:FilePath/Steve_Jobs_Theater_-_Auditorium.jpg?width=1280"
+    },
+    {
+      tag: "Public Experience • Flagship Retail",
+      title: "Apple Park Visitor Center & Rooftop Overlook",
+      desc: "Open to visitors from around the world, featuring a flagship Apple Store, café, an augmented-reality 3D campus model, and a rooftop deck facing the main ring.",
+      stat: "Open to the Public",
+      src: "https://commons.wikimedia.org/wiki/Special:FilePath/Apple_Park_Visitor_Center_-_October_2018_-_8839.jpg?width=1280"
+    }
+  ];
+
+  let activeParkIdx = 0;
+
+  function setParkSlide(idx) {
+    activeParkIdx = idx;
+    const item = parkPhotos[idx];
+    const mainImg = document.getElementById('park-main-img');
+    if (!mainImg) return;
+
+    mainImg.style.opacity = '0.25';
+    setTimeout(() => {
+      mainImg.src = item.src;
+      mainImg.alt = item.title;
+      mainImg.style.opacity = '1';
+    }, 140);
+
+    document.getElementById('park-top-tag').textContent = item.tag;
+    document.getElementById('park-photo-title').textContent = item.title;
+    document.getElementById('park-photo-desc').textContent = item.desc;
+    document.getElementById('park-photo-stat').textContent = item.stat;
+    document.getElementById('park-counter-badge').textContent = `Photo ${idx + 1} of ${parkPhotos.length}`;
+
+    document.querySelectorAll('#park-thumbs-row .park-thumb-btn').forEach((btn, i) => {
+      btn.classList.toggle('active', i === idx);
+    });
+  }
+
+  function stepParkSlide(dir) {
+    const next = (activeParkIdx + dir + parkPhotos.length) % parkPhotos.length;
+    setParkSlide(next);
+  }
+
+  /* Reliable Fullscreen Toggle (Native Fullscreen + Iframe Fallback) */
+  function syncFullscreenButton() {
+    const isNativeFs = Boolean(document.fullscreenElement || document.webkitFullscreenElement);
+    const isPseudoFs = document.body.classList.contains('pseudo-fullscreen');
+    const active = isNativeFs || isPseudoFs;
+    fsBtn.classList.toggle('active-tool', active);
+    fsBtn.innerHTML = active ? '&#x2715;' : '&#x26F6;';
+    fsBtn.title = active ? 'Exit Fullscreen (F / ESC)' : 'Toggle Fullscreen (F)';
+    fitStage();
+  }
+
+  async function toggleFullscreen() {
+    const isNativeFs = Boolean(document.fullscreenElement || document.webkitFullscreenElement);
+    const isPseudoFs = document.body.classList.contains('pseudo-fullscreen');
+
+    if (isNativeFs) {
+      try {
+        if (document.exitFullscreen) await document.exitFullscreen();
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+      } catch (e) {
+        document.body.classList.remove('pseudo-fullscreen');
+      }
+      syncFullscreenButton();
+      return;
+    }
+
+    if (isPseudoFs) {
+      document.body.classList.remove('pseudo-fullscreen');
+      syncFullscreenButton();
+      return;
+    }
+
+    const docEl = document.documentElement;
+    try {
+      if (docEl.requestFullscreen) {
+        await docEl.requestFullscreen();
+      } else if (docEl.webkitRequestFullscreen) {
+        docEl.webkitRequestFullscreen();
+      } else {
+        document.body.classList.add('pseudo-fullscreen');
+      }
+    } catch (err) {
+      /* Fallback to full-viewport mode if iframe blocks native fullscreen */
+      document.body.classList.add('pseudo-fullscreen');
+    }
+    syncFullscreenButton();
+  }
+
+  document.addEventListener('fullscreenchange', syncFullscreenButton);
+  document.addEventListener('webkitfullscreenchange', syncFullscreenButton);
+
+  /* Navigation Button Listeners */
+  document.getElementById('prevBtn').addEventListener('click', () => showSlide(current - 1));
+  document.getElementById('nextBtn').addEventListener('click', () => showSlide(current + 1));
+  fsBtn.addEventListener('click', toggleFullscreen);
+
+  /* Keyboard Shortcuts */
+  document.addEventListener('keydown', e => {
+    const modalOpen = document.getElementById('iphone-modal').classList.contains('open');
+
+    if (e.key === 'Escape') {
+      if (modalOpen) {
+        closeIphoneModal();
+      } else if (document.body.classList.contains('pseudo-fullscreen')) {
+        document.body.classList.remove('pseudo-fullscreen');
+        syncFullscreenButton();
+      }
+      return;
+    }
+
+    if (modalOpen) {
+      if (e.key === 'ArrowRight') stepIphoneModal(1);
+      if (e.key === 'ArrowLeft') stepIphoneModal(-1);
+      return;
+    }
+
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+      e.preventDefault();
+      showSlide(current + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      e.preventDefault();
+      showSlide(current - 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      showSlide(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      showSlide(slides.length - 1);
+    } else if (e.key === 'f' || e.key === 'F') {
+      e.preventDefault();
+      toggleFullscreen();
+    }
+  });
+
+  
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  document.addEventListener('touchend', e => {
+    if (document.getElementById('iphone-modal').classList.contains('open')) return;
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(dx) > 48) {
+      if (dx < 0) showSlide(current + 1);
+      else showSlide(current - 1);
+    }
+  }, { passive: true });
+
+  animateCounters(slides[0]);
+</script>
+</body>
+</html>
